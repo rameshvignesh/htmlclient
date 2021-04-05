@@ -1,0 +1,62 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script src="Scripts/jquery-3.4.1.min.js"></script>
+</head>
+<body>
+    <div>
+        <input type="button" value="GetAllDept" onclick="ShowDept()" />
+    </div>
+    <div id="result"></div>
+    <hr />
+    <div>
+        <h4>Get Department</h4>
+        <input type="text" id="textdepid" />
+        <input type="button" value="Get Dept" onclick="GetDept()" />
+        <br /><br />
+        Dept Id:<label id="lblId"></label><br />
+        Dept Name:<label id="lblName"></label><br />
+        Dept Location:<label id="lbllocation"></label>
+        <hr/>
+    </div>
+</body>
+</html>
+<script>
+
+    function GetDept() {
+        var id = $("#textdepid").val();
+        $.ajax({
+            url: "http://localhost:50429/api/Dept/GetDept/"+id,
+            method: 'Get',
+            success: function (data) {
+                $("#lblId").text(data.Id);
+                $("#lblName").text(data.Name);
+                $("#lbllocation").text(data.Location);
+            },
+            error: function (err) {
+                alert(err.status + "\n" + err.statusText + "\n" + err.responseJSON.Message)
+            }
+        })
+    }
+
+    function ShowDept() {
+        var output = document.getElementById("result");
+        var oline = "<br/>"
+
+        $.ajax({
+            url: "http://localhost:50429/api/Dept/GetDept",
+            method: 'Get',
+            success: function (data) {
+                for (var i = 0; i < data.length; i++) {
+                    oline=oline+data[i].Id+"--"+data[i].Name+"--"+data[i].Location+"<br/>"
+                }
+                output.innerHTML = oline;
+
+            },
+            error: function (err) { console.log(err);}
+        });
+    }
+
+</script>
